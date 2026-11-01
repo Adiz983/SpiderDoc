@@ -1,4 +1,4 @@
-# Doc Spider
+# Spider Doc
 
 A terminal tool that crawls a financial filing (10-K, 8-K, etc.) with an animated spider, highlights key figures and risk language, and prints a report. Python 3.8+, standard library only, no API keys.
 
