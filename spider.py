@@ -28,7 +28,7 @@ def clean(s): return re.sub(r'\s+', ' ', s).strip()
 def tonum(s):
     v = float(re.sub(r'[^\d.]', '', s) or 0); return -v if s.strip().startswith('(') else v
 
-# ---------- parsing ----------
+# parsing 
 def table_items(rows):
     cols, out = None, []
     for r in rows:
@@ -107,7 +107,7 @@ def build(items):
                 if c: L.append(('s', s)); T.append(dict(k='s', i=len(L) - 1, cat=c, s=s, page=page))
     return L, T
 
-# ---------- rendering ----------
+# rendering 
 def style_line(l, W, rd):
     k = l[0]
     if k == 'h': t = l[1][:W]; return sty(t, 16, GREEN, True) if rd else sty(t, bold=True)
@@ -139,7 +139,7 @@ def render(S, L):
     for cd in S['cards'][:max(1, R - H - 3)]: out.append(cd)
     sys.stdout.write(ESC + '[H' + ''.join(x + ESC + '[K\n' for x in out)[:-1] + ESC + '[J'); sys.stdout.flush()
 
-# ---------- scan ----------
+#  scan
 def scan(items, title, tk, budget, speed, anim, snapshot=False):
     L, T = build(items)
     S = dict(sp=0.0, hits=[], read={}, pop=None, fig=0, N=sum(t['k'] == 'r' for t in T), secs=[], flags=[], cards=[], tk=tk, title=title, figs=[])
@@ -180,7 +180,7 @@ def scan(items, title, tk, budget, speed, anim, snapshot=False):
         if anim: sys.stdout.write(ESC + '[?25h' + ESC + '[?1049l')
     return S
 
-# ---------- EDGAR ----------
+#  EDGAR 
 def make_get(email):
     cache = os.path.expanduser('~/.docspider-cache'); os.makedirs(cache, exist_ok=True)
     def get(url):
@@ -234,7 +234,7 @@ def edgar(tk, form, email):
             return m['title'], d, get(url).decode('utf-8', 'replace'), (cik, sub, get)
     sys.exit(f'No {form} found for {tk}.')
 
-# ---------- demo ----------
+#  demo 
 def demo_html():
     def tb(cols, rows):
         return '<table><tr><td></td>' + ''.join(f'<td>{c}</td>' for c in cols) + '</tr>' + ''.join(
@@ -248,7 +248,7 @@ def demo_html():
         + '<p>RESULTS AND STATED OUTLOOK</p><p>Adjusted EBITDA (non-GAAP) increased 35% year-over-year to $741 million. We expect full-year 2026 adjusted operating expenses of $2.1 billion to $2.2 billion.</p>'
         + '<p>GOVERNANCE AND CONTROLS</p><p>Management identified a material weakness in internal control over the financial close process. Our Chief Financial Officer sold 120,000 shares under a 10b5-1 plan ten days before the quarter-end blackout period. The company also disclosed a related party transaction with a director.</p>')
 
-# ---------- main ----------
+# main 
 def report(S, ins, title, tk):
     ln = [f'# Doc Spider report: {title} ({tk})', '', f'{S["fig"]} key figures, {len(S["secs"])} sections read, {len(S["flags"])} passages flagged', '', '## Key figures']
     for lab, a, b, cols, ch, pg in S['figs']:
